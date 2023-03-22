@@ -17,17 +17,17 @@ const router = new Router();
 
 router.get("/chat", async (ctx, next) => {
     // 获取请求中的参数
-    const { prompt } = ctx.request.query;
+    const { q } = ctx.request.query;
 
-    const res = await openai.createCompletion({
+    const res = await openai.createChatCompletion({
         // 对话模型
         model: "gpt-3.5-turbo",//  gpt-3.5-turbo 对话模型
-        prompt: prompt,
+        messages: [{role: "user", content: q}],
         max_tokens: 2048,
         temperature: 0.2
     })
     // 将生成的内容返回给客户端
-    ctx.body = res.data.choices
+    ctx.body = res.data.choices[0].message
 });
 
 router.get("/image", async (ctx, next) => {
